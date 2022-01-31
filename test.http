@@ -1,0 +1,31 @@
+GET https://localhost:7085/Todo
+
+###
+
+GET https://localhost:7085/Todo/1
+
+###
+
+PUT https://localhost:7085/Todo/2
+Content-Type: application/json
+
+{
+    "Id": 2,
+    "Name": "Todo 2",
+    "IsComplete": false
+}
+
+###
+
+POST https://localhost:7085/Todo
+Content-Type: application/json
+
+{
+    "Id": 2,
+    "Name": "Todo 2",
+    "IsComplete": true
+}
+
+###
+
+DELETE https://localhost:7085/Todo/1
