@@ -9,9 +9,9 @@ module webapp './modules/webapp.bicep' = {
   } 
 }
 
-// module apim './modules/apim.bicep' = {
-//   name: 'apim'
-//   params: {
-//     namePrefix: 'lunchbytes'
-//   } 
-// }
+module apim './modules/apim.bicep' = {
+  name: 'apim'
+  params: {
+    namePrefix: 'lunchbytes'
+  } 
+}
