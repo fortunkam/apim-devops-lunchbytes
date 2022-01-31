@@ -12,10 +12,8 @@ module webapp './modules/webapp.bicep' = {
   params: {
     namePrefix: 'lunchbytes'
     storageAccountName: storageAccountName
+    storageAccountKey: storage.outputs.storageAccountKey
   } 
-  dependsOn: [
-    storage
-  ]
 }
 
 // module apim './modules/apim.bicep' = {

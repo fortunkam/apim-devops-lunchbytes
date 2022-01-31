@@ -22,5 +22,7 @@ resource sa 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   properties: {}
 }
 
+output storageAccountKey string = listKeys(sa.id,sa.apiVersion).keys[0].value
+
 
 
