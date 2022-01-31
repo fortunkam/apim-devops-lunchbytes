@@ -1,3 +1,4 @@
+name: "Provision the Azure Resources"
 on:
   workflow_dispatch:
 

@@ -28,9 +28,9 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
 resource appPlan 'Microsoft.Web/serverfarms@2021-02-01' = {
   name: '${namePrefix}-app-plan'
   location: resourceGroup().location
+  kind: 'linux'
   sku: {
-    name: 'F1'
-    capacity: 1
+    name: 'S1'
   }
 }
 
@@ -39,6 +39,10 @@ resource webApp 'Microsoft.Web/sites@2021-02-01' = {
   location: resourceGroup().location
   properties: {
     serverFarmId: appPlan.id
+    siteConfig: {
+      localMySqlEnabled: false
+      netFrameworkVersion: 'v6.0'
+    }
   }
 }
 
