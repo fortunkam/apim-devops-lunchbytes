@@ -1,4 +1,4 @@
-var storageAccountName = 'lbyte${uniqueString(resourceGroup().id)}'
+var storageAccountName = 'lb${uniqueString(resourceGroup().id)}'
 
 module storage './modules/storage.bicep' = {
   name: 'storage'
@@ -13,6 +13,9 @@ module webapp './modules/webapp.bicep' = {
     namePrefix: 'lunchbytes'
     storageAccountName: storageAccountName
   } 
+  dependsOn: [
+    storage
+  ]
 }
 
 // module apim './modules/apim.bicep' = {
