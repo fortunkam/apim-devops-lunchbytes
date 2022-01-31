@@ -19,6 +19,7 @@ jobs:
       with:
         azcliversion: 2.30.0
         inlineScript: |
-          az group create -n LunchBytes --location northeurope
-    
-  
+          RESOURCE_GROUP='LunchBytes'
+          LOCATION='northeurope'
+          az group create -n $RESOURCE_GROUP --location $LOCATION
+          az deployment group create -g $RESOURCE_GROUP --template-file ./env/main.bicep
