@@ -1,4 +1,6 @@
-namespace apim_devops_demos.Models;
+using apim_devops_demos.Models;
+
+namespace apim_devops_demos.Repositories;
 
 public interface ITodoRepository
 {

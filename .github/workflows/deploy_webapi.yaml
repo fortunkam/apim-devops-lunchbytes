@@ -1,0 +1,53 @@
+name: "Build and Deploy a dotnet api and APIM configuration"
+on:
+  push:
+    branches:
+      - "main"
+jobs:
+  build_webapi:
+    runs-on: ubuntu-latest
+    name: "Build and Package dotnet api"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build ./apim_devops_demos.csproj --no-restore
+      - name: Publish
+        run: dotnet build ./apim_devops_demos.csproj -c Release -o website
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2.2.2
+        with:
+          name: website
+          path: website/**
+          if-no-files-found: error
+  deploy_webapi:
+    name: "Deploy api to Azure App Service"
+    runs-on: ubuntu-latest
+    needs: 
+      - build_webapi
+    env:
+      webapp-name: 'lunchbytes-web-app'
+    steps:
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v2.0.8
+        with:
+          name: website
+          path: website
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy web app
+        id: deploywebapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.webapp-name }}
+          package: website
+      - name: az cli logout
+        run: az logout
+  

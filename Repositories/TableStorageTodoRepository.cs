@@ -1,7 +1,8 @@
-﻿using Azure;
+﻿using apim_devops_demos.Models;
+using Azure;
 using Azure.Data.Tables;
 
-namespace apim_devops_demos.Models;
+namespace apim_devops_demos.Repositories;
 
 /// <summary>
 /// mplementation of <c href="ITodoRepository">ITodoRepository</c> that uses Azure Table Storage to store the data
