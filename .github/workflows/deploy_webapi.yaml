@@ -1,5 +1,6 @@
 name: "Build and Deploy a dotnet api and APIM configuration"
 on:
+  workflow_dispatch:
   push:
     branches:
       - "main"
