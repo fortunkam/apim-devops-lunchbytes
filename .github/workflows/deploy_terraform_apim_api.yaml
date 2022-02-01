@@ -27,14 +27,14 @@ jobs:
           az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT -g $RESOURCE_GROUP
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
+    - name: Move to Terraform Directory    
+      run: cd api/Terraform
     - name: Terraform Init
       id: tfinit      
       run: terraform init -backend-config="access_key=${{secrets.STORAGE_KEY}}"
     - name: Terraform Plan
       id: tfplan
-      run: |
-        cd api/Terraform
-        terraform plan -out todo-api.tfplan -no-color
+      run: terraform plan -out todo-api.tfplan -no-color
     - name: Terraform Apply
       id: tfapply
       run: terraform apply todo-api.tfplan -no-color
