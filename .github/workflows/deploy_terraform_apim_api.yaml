@@ -9,6 +9,10 @@ jobs:
   deploy_azure:
     env:
       TERRAFORM_DIRECTORY: ./api/Terraform
+      ARM_CLIENT_ID: ${{ secrets.AD_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AD_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AD_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AD_TENANT_ID }}
     runs-on: ubuntu-latest    
     steps:
     - name: Azure Login
