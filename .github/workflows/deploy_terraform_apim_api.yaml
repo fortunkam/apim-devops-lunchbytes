@@ -35,7 +35,9 @@ jobs:
       run: terraform init -backend-config="access_key=${{steps.cli.outputs.STORAGE_KEY}}"
     - name: Terraform Plan
       id: tfplan
-      run: terraform plan -out todo-api.tfplan -no-color
+      run: |
+        cd api/Terraform \
+        terraform plan -out todo-api.tfplan -no-color
     - name: Terraform Apply
       id: tfapply
       run: terraform apply todo-api.tfplan -no-color
