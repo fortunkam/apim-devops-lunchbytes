@@ -1,7 +1,7 @@
 apimServiceName: lunchbytes-apim
 apis:
 - description: Todo API
-  displayName: Todo Joke
+  displayName: Todo
   name: todo
   openApiSpec: ../swagger.json
   openApiSpecFormat: swagger
