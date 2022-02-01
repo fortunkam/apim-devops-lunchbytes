@@ -1,0 +1,7 @@
+name: 'Install-Apim-DevOps-Resource-Kit'
+description: 'Install API DevOps Resource Kit'
+runs:
+  using: "composite"
+  steps:
+    - run: echo Hello World
+      shell: bash
