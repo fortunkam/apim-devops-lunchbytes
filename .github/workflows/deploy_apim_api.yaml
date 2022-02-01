@@ -1,0 +1,25 @@
+name: "Deploy API Resources to API Management"
+on:
+  push:
+    branches:
+      - "bicep-dryrun"
+  workflow_dispatch:
+    
+jobs:
+  deplot_api:
+    name: "Deploy Todo API"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Azure CLI script file
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.30.0
+        inlineScript: |
+          RESOURCE_GROUP='LunchBytes'
+          az deployment group create -g $RESOURCE_GROUP --template-file ./api/todo-api.bicep
