@@ -12,5 +12,5 @@ backends:
   description: todo backend
   url: https://lunchbytes-web-app.azurewebsites.net/
   protocol: http
-outputLocation: .\templates
+outputLocation: ./templates
 version: 0.0.1
