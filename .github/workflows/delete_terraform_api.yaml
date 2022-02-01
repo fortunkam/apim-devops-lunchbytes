@@ -27,6 +27,6 @@ jobs:
     - name: Terraform Destroy
       working-directory: ${{env.TERRAFORM_DIRECTORY}}
       id: tfdestroy
-      run: terraform destroy
+      run: terraform destroy --auto-approve
 
 

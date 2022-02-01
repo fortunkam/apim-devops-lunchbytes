@@ -54,6 +54,9 @@ resource "azurerm_api_management_api_policy" "todo_api_policy" {
   api_name            = azurerm_api_management_api.todo_api.name
   resource_group_name = local.resource_group_name
   api_management_name = data.azurerm_api_management.apim.name
+  depends_on = [
+    azurerm_api_management_backend.todo_backend
+  ]
 
   xml_content = <<XML
 <policies>
