@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - name: CompositeActionTest
-      uses: actions/install-apim-devops-resource-kit
+      uses: ./.github/actions/install-apim-devops-resource-kit@creator-dryrun
     - name: Azure Login
       uses: azure/login@v1
       with:
