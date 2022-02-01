@@ -21,8 +21,6 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Checkout
       uses: actions/checkout@v1
-    # - name: CompositeActionTest
-    #   uses: ./.github/actions/install-apim-devops-resource-kit@creator-dryrun
     - name: Download and extract APIM Devops Resource Kit Release
       run: |
         wget ${{env.APIMDevOpsResourceKitUrl}} && tar xvzf ${{env.APIMDevOpsResourceKitFileName}} && rm ${{env.APIMDevOpsResourceKitFileName}}
@@ -42,9 +40,30 @@ jobs:
       run: |
         mkdir -p templates
         apim-templates create --configFile todo.yml
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.2.2
+    - name: Azure Login
+      uses: azure/login@v1
       with:
-        name: templates
-        path: ./api/Creator/templates/**
-        if-no-files-found: error
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Azure CLI script file
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.30.0
+        inlineScript: |
+          RESOURCE_GROUP='LunchBytes'
+          APIM_NAME='lunchbytes-apim'
+          az deployment group create -g $RESOURCE_GROUP --template-file ./api/Creator/templates/lunchbytes-apim-backends.template.json --parameters ApimServiceName=$APIM_NAME
+          az deployment group create -g $RESOURCE_GROUP --template-file ./api/Creator/templates/todo.api.template.json --parameters ApimServiceName=$APIM_NAME
+    - name: Azure Logout
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.0.72
+        inlineScript: |
+          az logout
+          az cache purge
+          az account clear
+    # - name: Upload a Build Artifact
+    #   uses: actions/upload-artifact@v2.2.2
+    #   with:
+    #     name: templates
+    #     path: ./api/Creator/templates/**
+    #     if-no-files-found: error
