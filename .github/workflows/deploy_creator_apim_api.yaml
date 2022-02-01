@@ -1,0 +1,48 @@
+name: "Deploy Creator API Resources to API Management"
+on:
+  push:
+    branches:
+      - "creator-dryrun"
+  workflow_dispatch:
+    
+jobs:
+  deplot_api:
+    name: "Deploy Todo API"
+    runs-on: ubuntu-latest
+    env:
+      APIMDevOpsResourceKitUrl: "https://github.com/Azure/azure-api-management-devops-resource-kit/archive/refs/tags/v0.7.tar.gz"
+      APIMDevOpsResourceKitFileName: "v0.7.tar.gz"
+      APIMDevOpsResourceKitSourcePath: "./azure-api-management-devops-resource-kit-0.7/src/APIM_ARMTemplate/apimtemplate"
+
+    steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Download and extract APIM Devops Resource Kit Release
+      run: |
+        wget ${{env.APIMDevOpsResourceKitUrl}} && tar xvzf ${{env.APIMDevOpsResourceKitFileName}} && rm ${{env.APIMDevOpsResourceKitFileName}}
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+        include-prerelease: true
+    - name: Build and Install Resource Kit as a global tool
+      run: |
+        dotnet restore
+        dotnet build ./apim_devops_demos.csproj --no-restore
+        dotnet pack -c Release
+        dotnet tool install -g --add-source ./bin/Release apimtemplate
+      working-directory: ${{env.APIMDevOpsResourceKitSourcePath}}
+    - name: Run the Creator
+      working-directory: ./api/Creator
+      run: |
+        mkdir templates
+        apim-template create --configFile .\todo.yml
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: templates
+        path: ./api/Creator/templates/**
+        if-no-files-found: error

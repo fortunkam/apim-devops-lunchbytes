@@ -1,0 +1,16 @@
+apimServiceName: lunchbytes-apim
+apis:
+- description: Todo API
+  displayName: Todo Joke
+  name: todo
+  openApiSpec: ../swagger.json
+  openApiSpecFormat: swagger
+  policy: policies/all_operations.xml
+  suffix: ''
+backends:
+- title: todo
+  description: todo backend
+  url: https://lunchbytes-web-app.azurewebsites.net/
+  protocol: http
+outputLocation: .\templates
+version: 0.0.1

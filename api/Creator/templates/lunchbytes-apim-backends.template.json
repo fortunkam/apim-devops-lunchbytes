@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "ApimServiceName": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "properties": {
+        "title": "todo",
+        "description": "todo backend",
+        "url": "https://lunchbytes-web-app.azurewebsites.net/",
+        "protocol": "http"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/todo')]",
+      "type": "Microsoft.ApiManagement/service/backends",
+      "apiVersion": "2021-01-01-preview",
+      "dependsOn": []
+    }
+  ]
+}
