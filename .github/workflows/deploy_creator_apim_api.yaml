@@ -39,7 +39,7 @@ jobs:
       working-directory: ./api/Creator
       run: |
         mkdir -p templates
-        apim-template create --configFile .\todo.yml
+        apim-templates create --configFile .\todo.yml
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.2
       with:
