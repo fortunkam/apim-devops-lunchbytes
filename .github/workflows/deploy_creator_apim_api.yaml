@@ -15,14 +15,14 @@ jobs:
       APIMDevOpsResourceKitSourcePath: "./azure-api-management-devops-resource-kit-0.7/src/APIM_ARMTemplate/apimtemplate"
 
     steps:
-    - name: CompositeActionTest
-      uses: ./.github/actions/install-apim-devops-resource-kit@creator-dryrun
     - name: Azure Login
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Checkout
       uses: actions/checkout@v1
+    - name: CompositeActionTest
+      uses: ./.github/actions/install-apim-devops-resource-kit@creator-dryrun
     - name: Download and extract APIM Devops Resource Kit Release
       run: |
         wget ${{env.APIMDevOpsResourceKitUrl}} && tar xvzf ${{env.APIMDevOpsResourceKitFileName}} && rm ${{env.APIMDevOpsResourceKitFileName}}
