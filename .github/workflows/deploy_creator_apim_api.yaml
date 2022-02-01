@@ -17,14 +17,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
     - name: Install DevOps Toolkit
-      uses: fortunkam/apim-devops-resource-kit-actions/install-resource-kit@main
+      uses: fortunkam/apim-devops-resource-kit-actions/install-resource-kit@v1
       with:
         releaseVersion: 0.7
     - name: Ensure the directory Exists
       working-directory: ./api/Creator
       run: mkdir -p templates
     - name: Run the creator Tool
-      uses: fortunkam/apim-devops-resource-kit-actions/run-creator@main
+      uses: fortunkam/apim-devops-resource-kit-actions/run-creator@v1
       with:
         workingDirectory: ./api/Creator
         configFile: todo.yml
