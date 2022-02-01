@@ -33,7 +33,7 @@ jobs:
     - name: Terraform Plan
       id: tfplan
       run: |
-        cd api/Terraform \
+        cd api/Terraform
         terraform plan -out todo-api.tfplan -no-color
     - name: Terraform Apply
       id: tfapply
