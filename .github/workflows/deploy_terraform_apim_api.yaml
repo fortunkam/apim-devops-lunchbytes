@@ -22,17 +22,14 @@ jobs:
         azcliversion: 2.30.0
         inlineScript: |
           RESOURCE_GROUP='LunchBytes'
-          LOCATION='northeurope'
           STORAGE_ACCOUNT='lbynt4wiscjkwnm'
           CONTAINER_NAME='terraform-state'
           az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT -g $RESOURCE_GROUP
-          STORAGE_KEY=$(az storage account keys list -n $STORAGE_ACCOUNT -g $RESOURCE_GROUP --query [0].value -o tsv)
-          echo "::set-output name=STORAGE_KEY::$STORAGE_KEY"
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
     - name: Terraform Init
-      id: tfinit
-      run: terraform init -backend-config="access_key=${{steps.cli.outputs.STORAGE_KEY}}"
+      id: tfinit      
+      run: terraform init -backend-config="access_key=${{secrets.STORAGE_KEY}}"
     - name: Terraform Plan
       id: tfplan
       run: |
