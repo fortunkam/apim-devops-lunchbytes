@@ -5,7 +5,7 @@ apis:
   name: todo
   openApiSpec: ../swagger.json
   openApiSpecFormat: swagger
-  policy: policies/all_operations.xml
+  policy: Policies/all_operations.xml
   suffix: ''
 backends:
 - title: todo
