@@ -24,7 +24,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
     ]
     format: 'swagger-json'
     path: 'joke'
-    value: loadTextContent('swagger.json')
+    value: loadTextContent('../swagger.json')
   }
 }
 

@@ -22,4 +22,4 @@ jobs:
         azcliversion: 2.30.0
         inlineScript: |
           RESOURCE_GROUP='LunchBytes'
-          az deployment group create -g $RESOURCE_GROUP --template-file ./api/todo-api.bicep
+          az deployment group create -g $RESOURCE_GROUP --template-file ./api/bicep/todo-api.bicep
