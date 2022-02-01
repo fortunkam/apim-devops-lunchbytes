@@ -1,0 +1,42 @@
+name: "Deploy Terraform API Resources to API Management"
+on:
+  push:
+    branches:
+      - "terraform-dryrun"
+  workflow_dispatch:
+
+jobs:
+  deploy_azure:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Azure CLI - Get Storage Credentials
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.30.0
+        inlineScript: |
+          RESOURCE_GROUP='LunchBytes'
+          LOCATION='northeurope'
+          STORAGE_ACCOUNT='lbynt4wiscjkwnm'
+          CONTAINER_NAME='terraform-state'
+          az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT -g $RESOURCE_GROUP
+          STORAGE_KEY=$(az storage account keys list -n $STORAGE_ACCOUNT -g $RESOURCE_GROUP --query [0].value -o tsv)
+          echo "::set-env name=STORAGE_KEY::$STORAGE_KEY"
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+    - name: Terraform Init
+      id: tfinit
+      run: terraform init -backend-config="access_key=$STORAGE_KEY"
+    - name: Terraform Plan
+      id: tfplan
+      run: terraform plan -out todo-api.tfplan -no-color
+    - name: Terraform Apply
+      id: tfapply
+      run: terraform apply todo-api.tfplan -no-color
+
+
