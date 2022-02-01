@@ -6,14 +6,10 @@ on:
   workflow_dispatch:
     
 jobs:
-  deploy_api:
+  extract_api:
     name: "Deploy Todo API"
     runs-on: ubuntu-latest
     steps:
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Checkout
       uses: actions/checkout@v1
     - name: Install DevOps Toolkit
@@ -28,6 +24,26 @@ jobs:
       with:
         workingDirectory: ./api/Extractor
         configFile: extractorConfig.json
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: templates
+        path: ./api/Extractor/templates/**
+        if-no-files-found: error
+  deploy_api:
+    name: "Deploy Todo API"
+    runs-on: ubuntu-latest
+    needs: [ extract_api ]
+    steps:
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v2.0.8
+      with:
+        name: templates
+        path: templates
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Azure CLI script file
       uses: azure/CLI@v1
       with:
@@ -35,8 +51,11 @@ jobs:
         inlineScript: |
           RESOURCE_GROUP='LunchBytes'
           APIM_NAME='lunchbytes-apim-target'
-          az deployment group create -g $RESOURCE_GROUP --template-file ./api/Extractor/templates/todo-backends.template.json --parameters ApimServiceName=$APIM_NAME
-          az deployment group create -g $RESOURCE_GROUP --template-file ./api/Extractor/templates/todo-todo-api.template.json --parameters ApimServiceName=$APIM_NAME
+          az deployment group create -g $RESOURCE_GROUP --template-file ./templates/todo-globalServicePolicy.template.json --parameters ApimServiceName=$APIM_NAME
+          az deployment group create -g $RESOURCE_GROUP --template-file ./templates/todo-tags.template.json --parameters ApimServiceName=$APIM_NAME
+          az deployment group create -g $RESOURCE_GROUP --template-file ./templates/todo-backends.template.json --parameters ApimServiceName=$APIM_NAME
+          az deployment group create -g $RESOURCE_GROUP --template-file ./templates/todo-todo-api.template.json --parameters ApimServiceName=$APIM_NAME
+          az deployment group create -g $RESOURCE_GROUP --template-file ./templates/todo-apiTags.template.json--parameters ApimServiceName=$APIM_NAME
     - name: Azure Logout
       uses: azure/CLI@v1
       with:
