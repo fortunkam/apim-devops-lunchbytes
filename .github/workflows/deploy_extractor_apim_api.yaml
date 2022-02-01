@@ -36,7 +36,7 @@ jobs:
           RESOURCE_GROUP='LunchBytes'
           APIM_NAME='lunchbytes-apim-target'
           az deployment group create -g $RESOURCE_GROUP --template-file ./api/Extractor/templates/todo-backends.template.json --parameters ApimServiceName=$APIM_NAME
-          az deployment group create -g $RESOURCE_GROUP --template-file ./api/Extractor/templates/todo-apis.template.json --parameters ApimServiceName=$APIM_NAME
+          az deployment group create -g $RESOURCE_GROUP --template-file ./api/Extractor/templates/todo-todo-apis.template.json --parameters ApimServiceName=$APIM_NAME
     - name: Azure Logout
       uses: azure/CLI@v1
       with:
