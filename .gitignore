@@ -400,3 +400,6 @@ FodyWeavers.xsd
 **/.terraform/*
 **/.terraform.lock.hcl
 **/*.tfplan
+
+/api/Creator/templates
+/api/Creator/templates/*
