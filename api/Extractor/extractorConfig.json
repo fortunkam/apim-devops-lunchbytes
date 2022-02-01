@@ -1,0 +1,8 @@
+{
+    "baseFileName": "todo",
+    "apiName": "todo",
+    "sourceApimName": "lunchbytes-apim",
+    "destinationApimName": "lunchbytes-apim-target",
+    "resourceGroup": "LunchBytes",
+    "fileFolder":"./templates"
+}

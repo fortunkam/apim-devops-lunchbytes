@@ -1,0 +1,47 @@
+name: "Deploy Extractor API Resources to API Management"
+on:
+  push:
+    branches:
+      - "extractor-dryrun"
+  workflow_dispatch:
+    
+jobs:
+  deploy_api:
+    name: "Deploy Todo API"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Install DevOps Toolkit
+      uses: fortunkam/apim-devops-resource-kit-actions/install-resource-kit@v1
+      with:
+        releaseVersion: 0.7
+    - name: Ensure the directory Exists
+      working-directory: ./api/Extractor
+      run: mkdir -p templates
+    - name: Run the extractor Tool
+      uses: fortunkam/apim-devops-resource-kit-actions/run-extractor@v1
+      with:
+        workingDirectory: ./api/Extractor
+        configFile: extractorConfig.json
+    - name: Azure CLI script file
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.30.0
+        inlineScript: |
+          RESOURCE_GROUP='LunchBytes'
+          APIM_NAME='lunchbytes-apim-target'
+          az deployment group create -g $RESOURCE_GROUP --template-file ./api/Extractor/templates/todo-backends.template.json --parameters ApimServiceName=$APIM_NAME
+          az deployment group create -g $RESOURCE_GROUP --template-file ./api/Extractor/templates/todo-apis.template.json --parameters ApimServiceName=$APIM_NAME
+    - name: Azure Logout
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.0.72
+        inlineScript: |
+          az logout
+          az cache purge
+          az account clear
