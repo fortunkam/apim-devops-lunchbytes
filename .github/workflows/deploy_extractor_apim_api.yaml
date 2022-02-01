@@ -56,7 +56,7 @@ jobs:
           az deployment group create -g $RESOURCE_GROUP --template-file ./templates/todo-tags.template.json --parameters ApimServiceName=$APIM_NAME
           az deployment group create -g $RESOURCE_GROUP --template-file ./templates/todo-backends.template.json --parameters ApimServiceName=$APIM_NAME
           az deployment group create -g $RESOURCE_GROUP --template-file ./templates/todo-todo-api.template.json --parameters ApimServiceName=$APIM_NAME
-          az deployment group create -g $RESOURCE_GROUP --template-file ./templates/todo-apiTags.template.json--parameters ApimServiceName=$APIM_NAME
+          az deployment group create -g $RESOURCE_GROUP --template-file ./templates/todo-apiTags.template.json --parameters ApimServiceName=$APIM_NAME
     - name: Azure Logout
       uses: azure/CLI@v1
       with:
