@@ -28,10 +28,6 @@ jobs:
       with:
         workingDirectory: ./api/Creator
         configFile: todo.yml
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Azure CLI script file
       uses: azure/CLI@v1
       with:
