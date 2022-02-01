@@ -23,7 +23,7 @@ resource api 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
       'https'
     ]
     format: 'swagger-json'
-    path: 'joke'
+    path: ''
     value: loadTextContent('../swagger.json')
   }
 }
