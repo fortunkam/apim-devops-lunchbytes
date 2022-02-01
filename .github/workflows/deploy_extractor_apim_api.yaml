@@ -7,20 +7,21 @@ on:
     
 jobs:
   extract_api:
-    name: "Deploy Todo API"
+    name: "Extract Todo API"
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v1
     - name: Install DevOps Toolkit
-      uses: fortunkam/apim-devops-resource-kit-actions/install-resource-kit@v1
+      uses: fortunkam/apim-devops-resource-kit-actions/install-resource-kit@v1.1
       with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
         releaseVersion: 0.7
     - name: Ensure the directory Exists
       working-directory: ./api/Extractor
       run: mkdir -p templates
     - name: Run the extractor Tool
-      uses: fortunkam/apim-devops-resource-kit-actions/run-extractor@v1
+      uses: fortunkam/apim-devops-resource-kit-actions/run-extractor@v1.1
       with:
         workingDirectory: ./api/Extractor
         configFile: extractorConfig.json
@@ -31,7 +32,7 @@ jobs:
         path: ./api/Extractor/templates/**
         if-no-files-found: error
   deploy_api:
-    name: "Deploy Todo API"
+    name: "Deploy Todo API to Target"
     runs-on: ubuntu-latest
     needs: [ extract_api ]
     steps:
