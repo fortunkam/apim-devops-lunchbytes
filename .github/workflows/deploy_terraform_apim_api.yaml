@@ -16,6 +16,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
     - name: Azure CLI - Get Storage Credentials
+      id: cli
       uses: azure/CLI@v1
       with:
         azcliversion: 2.30.0
@@ -26,12 +27,12 @@ jobs:
           CONTAINER_NAME='terraform-state'
           az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT -g $RESOURCE_GROUP
           STORAGE_KEY=$(az storage account keys list -n $STORAGE_ACCOUNT -g $RESOURCE_GROUP --query [0].value -o tsv)
-          echo "::set-env name=STORAGE_KEY::$STORAGE_KEY"
+          echo "::set-output name=STORAGE_KEY::$STORAGE_KEY"
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
     - name: Terraform Init
       id: tfinit
-      run: terraform init -backend-config="access_key=$STORAGE_KEY"
+      run: terraform init -backend-config="access_key=${{steps.cli.outputs.STORAGE_KEY}}"
     - name: Terraform Plan
       id: tfplan
       run: terraform plan -out todo-api.tfplan -no-color
