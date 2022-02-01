@@ -1,4 +1,4 @@
-name: "Deploy API Resources to API Management"
+name: "Deploy Bicep API Resources to API Management"
 on:
   push:
     branches:
