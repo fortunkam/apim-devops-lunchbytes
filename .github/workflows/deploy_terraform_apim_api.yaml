@@ -7,6 +7,8 @@ on:
 
 jobs:
   deploy_azure:
+    env:
+      TERRAFORM_DIRECTORY: api/Terraform
     runs-on: ubuntu-latest
     steps:
     - name: Azure Login
@@ -27,15 +29,16 @@ jobs:
           az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT -g $RESOURCE_GROUP
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
-    - name: Move to Terraform Directory    
-      run: cd api/Terraform
     - name: Terraform Init
+      working-directory: $TERRAFORM_DIRECTORY
       id: tfinit      
       run: terraform init -backend-config="access_key=${{secrets.STORAGE_KEY}}"
     - name: Terraform Plan
+      working-directory: $TERRAFORM_DIRECTORY
       id: tfplan
       run: terraform plan -out todo-api.tfplan -no-color
     - name: Terraform Apply
+      working-directory: $TERRAFORM_DIRECTORY
       id: tfapply
       run: terraform apply todo-api.tfplan -no-color
 
