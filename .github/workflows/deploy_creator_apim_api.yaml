@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     
 jobs:
-  deplot_api:
+  deploy_api:
     name: "Deploy Todo API"
     runs-on: ubuntu-latest
     env:
@@ -21,20 +21,24 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Checkout
       uses: actions/checkout@v1
-    - name: Download and extract APIM Devops Resource Kit Release
-      run: |
-        wget ${{env.APIMDevOpsResourceKitUrl}} && tar xvzf ${{env.APIMDevOpsResourceKitFileName}} && rm ${{env.APIMDevOpsResourceKitFileName}}
-    - uses: actions/setup-dotnet@v1
+    # - name: Download and extract APIM Devops Resource Kit Release
+    #   run: |
+    #     wget ${{env.APIMDevOpsResourceKitUrl}} && tar xvzf ${{env.APIMDevOpsResourceKitFileName}} && rm ${{env.APIMDevOpsResourceKitFileName}}
+    # - uses: actions/setup-dotnet@v1
+    #   with:
+    #     dotnet-version: '3.1.x'
+    #     include-prerelease: true
+    # - name: Build and Install Resource Kit as a global tool
+    #   run: |
+    #     dotnet restore
+    #     dotnet build ./apimtemplate.csproj --no-restore
+    #     dotnet pack -c Release
+    #     dotnet tool install -g --add-source ./bin/Release apimtemplate
+    #   working-directory: ${{env.APIMDevOpsResourceKitSourcePath}}
+    - name: Install DevOps Toolkit
+      uses: fortunkam/apim-devops-resource-kit-actions/install-resource-kit@main
       with:
-        dotnet-version: '3.1.x'
-        include-prerelease: true
-    - name: Build and Install Resource Kit as a global tool
-      run: |
-        dotnet restore
-        dotnet build ./apimtemplate.csproj --no-restore
-        dotnet pack -c Release
-        dotnet tool install -g --add-source ./bin/Release apimtemplate
-      working-directory: ${{env.APIMDevOpsResourceKitSourcePath}}
+        releaseVersion: 0.7
     - name: Run the Creator
       working-directory: ./api/Creator
       run: |
