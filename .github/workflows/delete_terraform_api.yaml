@@ -1,0 +1,32 @@
+name: "Delete Terraform API Resources from API Management"
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy_azure:
+    env:
+      TERRAFORM_DIRECTORY: ./api/Terraform
+      ARM_CLIENT_ID: ${{ secrets.AD_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AD_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AD_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AD_TENANT_ID }}
+    runs-on: ubuntu-latest    
+    steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+    - name: Terraform Init
+      working-directory: ${{env.TERRAFORM_DIRECTORY}}
+      id: tfinit      
+      run: terraform init -backend-config="access_key=${{secrets.STORAGE_KEY}}"
+    - name: Terraform Destroy
+      working-directory: ${{env.TERRAFORM_DIRECTORY}}
+      id: tfdestroy
+      run: terraform destroy
+
+
