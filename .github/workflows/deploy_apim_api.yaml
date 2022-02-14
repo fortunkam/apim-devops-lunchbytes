@@ -16,7 +16,14 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Checkout
       uses: actions/checkout@v1
-    - name: Azure CLI script file
+    - name: Azure CLI - Validate
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.30.0
+        inlineScript: |
+          RESOURCE_GROUP='LunchBytes'
+          az deployment group what-if -g $RESOURCE_GROUP --template-file ./api/bicep/todo-api.bicep -r ResourceIdOnly
+    - name: Azure CLI - Deploy
       uses: azure/CLI@v1
       with:
         azcliversion: 2.30.0
