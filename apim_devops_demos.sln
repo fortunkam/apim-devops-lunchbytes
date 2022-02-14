@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32104.313
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "apim_devops_demos", "apim_devops_demos.csproj", "{9F1B7023-4AFF-48DB-A846-092F4D448520}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F1B7023-4AFF-48DB-A846-092F4D448520}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F1B7023-4AFF-48DB-A846-092F4D448520}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F1B7023-4AFF-48DB-A846-092F4D448520}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F1B7023-4AFF-48DB-A846-092F4D448520}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E0101F7F-6060-4F84-86A3-31A101012512}
+	EndGlobalSection
+EndGlobal
