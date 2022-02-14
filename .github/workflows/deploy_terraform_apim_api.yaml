@@ -1,0 +1,49 @@
+name: "Deploy Terraform API Resources to API Management"
+on:
+  push:
+    branches:
+      - "terraform-dryrun"
+  workflow_dispatch:
+
+jobs:
+  deploy_azure:
+    env:
+      TERRAFORM_DIRECTORY: ./api/Terraform
+      ARM_CLIENT_ID: ${{ secrets.AD_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AD_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AD_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AD_TENANT_ID }}
+    runs-on: ubuntu-latest    
+    steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Azure CLI - Get Storage Credentials
+      id: cli
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.30.0
+        inlineScript: |
+          RESOURCE_GROUP='LunchBytes'
+          STORAGE_ACCOUNT='lbynt4wiscjkwnm'
+          CONTAINER_NAME='terraform-state'
+          az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT -g $RESOURCE_GROUP
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+    - name: Terraform Init
+      working-directory: ${{env.TERRAFORM_DIRECTORY}}
+      id: tfinit      
+      run: terraform init -backend-config="access_key=${{secrets.STORAGE_KEY}}"
+    - name: Terraform Plan
+      working-directory: ${{env.TERRAFORM_DIRECTORY}}
+      id: tfplan
+      run: terraform plan -out todo-api.tfplan -no-color
+    - name: Terraform Apply
+      working-directory: ${{env.TERRAFORM_DIRECTORY}}
+      id: tfapply
+      run: terraform apply todo-api.tfplan -no-color
+
+
