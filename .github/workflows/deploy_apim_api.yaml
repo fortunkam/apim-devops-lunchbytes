@@ -1,9 +1,10 @@
 name: "Deploy Bicep API Resources to API Management"
 on:
+  workflow_dispatch:
   push:
     branches:
       - "bicep-dryrun"
-  workflow_dispatch:
+  
     
 jobs:
   deplot_api:
